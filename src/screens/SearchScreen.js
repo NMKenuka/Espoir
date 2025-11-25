@@ -20,9 +20,13 @@ import { lightTheme, darkTheme } from '../styles/theme';
 const SearchScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { searchResults, searchLoading } = useSelector(state => state.movies);
-  const { isDarkMode } = useSelector(state => state.auth);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+    const moviesState = useSelector(state => state?.movies);
+    const searchResults = moviesState?.searchResults || [];
+    const searchLoading = moviesState?.searchLoading || false;
+  
+    const authState = useSelector(state => state?.auth);
+    const isDarkMode = authState?.isDarkMode || false;
+    const theme = isDarkMode ? darkTheme : lightTheme;
 
   const [query, setQuery] = useState('');
 
@@ -79,7 +83,11 @@ const SearchScreen = () => {
 
       {/* Results */}
       {searchLoading ? (
-        <LoadingSpinner />
+          <View style={styles.emptyContainer}>
+            <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
+              Searching...
+            </Text>
+          </View>
       ) : searchResults.length > 0 ? (
         <FlatList
           data={searchResults}
@@ -89,7 +97,7 @@ const SearchScreen = () => {
               onPress={() => handleMoviePress(item)}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.id?.toString()}
           numColumns={2}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.content}

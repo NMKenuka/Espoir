@@ -8,6 +8,16 @@ export const lightTheme = {
   border: '#E0E0E0',
   tabBar: '#FFFFFF',
   statusBar: 'dark',
+  spacing: {
+    small: 8,
+    medium: 16,
+    large: 24,
+  },
+  typography: {
+    small: 12,
+    medium: 16,
+    large: 20,
+  },
 };
 
 export const darkTheme = {
@@ -19,4 +29,14 @@ export const darkTheme = {
   border: '#333333',
   tabBar: '#1A1A1A',
   statusBar: 'light',
+  spacing: {
+    small: 8,
+    medium: 16,
+    large: 24,
+  },
+  typography: {
+    small: 12,
+    medium: 16,
+    large: 20,
+  },
 };

@@ -22,9 +22,14 @@ const { width } = Dimensions.get('window');
 const DetailsScreen = ({ route }) => {
   const { movieId } = route.params;
   const dispatch = useDispatch();
-  const { selectedMovie } = useSelector(state => state.movies);
-  const favorites = useSelector(state => state.favorites.items);
-  const { isDarkMode } = useSelector(state => state.auth);
+  const moviesState = useSelector(state => state?.movies);
+  const selectedMovie = moviesState?.selectedMovie;
+  
+  const favoritesState = useSelector(state => state?.favorites);
+  const favorites = favoritesState?.items || [];
+  
+  const authState = useSelector(state => state?.auth);
+  const isDarkMode = authState?.isDarkMode || false;
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const isFavorite = favorites.some(item => item.id === movieId);
@@ -37,12 +42,18 @@ const DetailsScreen = ({ route }) => {
     if (isFavorite) {
       dispatch(removeFavorite(movieId));
     } else {
-      dispatch(addFavorite(selectedMovie));
+      if (selectedMovie) {
+        dispatch(addFavorite(selectedMovie));
+      }
     }
   };
 
   if (!selectedMovie) {
-    return <LoadingSpinner />;
+     return (
+       <View style={[styles.container, { backgroundColor: theme.background }]}>
+         <Text style={[styles.loadingText, { color: theme.text }]}>Loading...</Text>
+       </View>
+     );
   }
 
   const imageUrl = movieAPI.getImageUrl(selectedMovie.poster_path);

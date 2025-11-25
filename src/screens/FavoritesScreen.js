@@ -16,8 +16,11 @@ import { lightTheme, darkTheme } from '../styles/theme';
 
 const FavoritesScreen = () => {
   const navigation = useNavigation();
-  const favorites = useSelector(state => state.favorites.items);
-  const { isDarkMode } = useSelector(state => state.auth);
+  const favoritesState = useSelector(state => state?.favorites);
+  const favorites = favoritesState?.items || [];
+  
+  const authState = useSelector(state => state?.auth);
+  const isDarkMode = authState?.isDarkMode || false;
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleMoviePress = (movie) => {
@@ -46,7 +49,7 @@ const FavoritesScreen = () => {
               onPress={() => handleMoviePress(item)}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id?.toString()}
           numColumns={2}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.content}

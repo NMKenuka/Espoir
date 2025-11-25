@@ -2,9 +2,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STORAGE_KEYS = {
-  USER: '@streambox_user',
-  FAVORITES: '@streambox_favorites',
-  THEME: '@streambox_theme',
+  USER: '@espoir_user',
+  FAVORITES: '@espoir_favorites',
+  THEME: '@espoir_theme',
 };
 
 export const storageService = {

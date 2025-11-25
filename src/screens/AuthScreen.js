@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import {
   View,
@@ -13,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Feather } from '@expo/vector-icons';
+import { Film, User, Mail, Lock } from 'react-native-feather';
 import { login, register, clearError } from '../store/authSlice';
 import { loginSchema, registerSchema } from '../utils/validation';
 import { lightTheme, darkTheme } from '../styles/theme';
@@ -21,7 +19,10 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const AuthScreen = () => {
   const dispatch = useDispatch();
-  const { loading, error, isDarkMode } = useSelector(state => state.auth);
+  const authState = useSelector(state => state?.auth);
+  const loading = authState?.loading || false;
+  const error = authState?.error || null;
+  const isDarkMode = authState?.isDarkMode || false;
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const [isLogin, setIsLogin] = useState(true);
@@ -35,7 +36,6 @@ const AuthScreen = () => {
 
   const handleChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -101,17 +101,13 @@ const AuthScreen = () => {
         {/* Logo */}
         <View style={styles.logoContainer}>
           <Film stroke={theme.primary} width={60} height={60} />
-          <Text style={[styles.logo, { color: theme.primary }]}>StreamBox</Text>
-          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            Your Entertainment Hub
-          </Text>
+          <Text style={[styles.logo, { color: theme.primary }]}>Espoir</Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>Your Entertainment Hub</Text>
         </View>
 
         {/* Form */}
         <View style={[styles.formContainer, { backgroundColor: theme.card }]}>
-          <Text style={[styles.title, { color: theme.text }]}>
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </Text>
+          <Text style={[styles.title, { color: theme.text }]}> {isLogin ? 'Welcome Back' : 'Create Account'}</Text>
 
           {!isLogin && (
             <>
@@ -190,22 +186,19 @@ const AuthScreen = () => {
             style={[styles.button, { backgroundColor: theme.primary }]}
             onPress={handleSubmit}
           >
-            <Text style={styles.buttonText}>
-              {isLogin ? 'Login' : 'Register'}
-            </Text>
+            <Text style={styles.buttonText}>{isLogin ? 'Login' : 'Register'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={toggleMode}>
             <Text style={[styles.toggleText, { color: theme.textSecondary }]}>
-              {isLogin
-                ? "Don't have an account? Register"
-                : 'Already have an account? Login'}
+              {isLogin ? "Don't have an account? Register" : 'Already have an account? Login'}
             </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
+
 };
 
 const styles = StyleSheet.create({

@@ -18,10 +18,11 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
 const MovieCard = ({ movie, onPress }) => {
-  const isDarkMode = useSelector(state => state.auth.isDarkMode);
+  const authState = useSelector(state => state?.auth);
+  const isDarkMode = authState?.isDarkMode || false;
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const imageUrl = movieAPI.getImageUrl(movie.poster_path);
+  const imageUrl = movieAPI.getImageUrl(movie?.poster_path);
 
   return (
     <TouchableOpacity
@@ -39,7 +40,7 @@ const MovieCard = ({ movie, onPress }) => {
           style={[styles.title, { color: theme.text }]}
           numberOfLines={2}
         >
-          {movie.title}
+          {movie?.title}
         </Text>
         <View style={styles.ratingContainer}>
           <Star
@@ -49,11 +50,11 @@ const MovieCard = ({ movie, onPress }) => {
             stroke="#FFD700"
           />
           <Text style={[styles.rating, { color: theme.textSecondary }]}>
-            {movie.vote_average?.toFixed(1)}
+            {movie?.vote_average?.toFixed(1)}
           </Text>
         </View>
         <Text style={[styles.year, { color: theme.textSecondary }]}>
-          {movie.release_date?.split('-')[0]}
+          {movie?.release_date?.split('-')[0]}
         </Text>
       </View>
     </TouchableOpacity>

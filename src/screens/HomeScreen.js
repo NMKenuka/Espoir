@@ -19,8 +19,14 @@ import { lightTheme, darkTheme } from '../styles/theme';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { trending, popular, loading } = useSelector(state => state.movies);
-  const { user, isDarkMode } = useSelector(state => state.auth);
+  const moviesState = useSelector(state => state?.movies);
+  const trending = moviesState?.trending || [];
+  const popular = moviesState?.popular || [];
+  const loading = moviesState?.loading || false;
+  
+  const authState = useSelector(state => state?.auth);
+  const user = authState?.user;
+  const isDarkMode = authState?.isDarkMode || false;
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const HomeScreen = () => {
             onPress={() => handleMoviePress(item)}
           />
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id?.toString()}
         numColumns={2}
         columnWrapperStyle={styles.row}
         scrollEnabled={false}
@@ -58,7 +64,11 @@ const HomeScreen = () => {
   );
 
   if (loading && trending.length === 0) {
-    return <LoadingSpinner />;
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[styles.loadingText, { color: theme.text }]}>Loading...</Text>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -66,10 +76,10 @@ const HomeScreen = () => {
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
         <Text style={[styles.headerTitle, { color: theme.primary }]}>
-          StreamBox
+          Espoir
         </Text>
         <Text style={[styles.welcomeText, { color: theme.textSecondary }]}>
-          Welcome, {user?.username}!
+          Welcome, {user?.username || 'User'}!
         </Text>
       </View>
 
@@ -127,6 +137,11 @@ const styles = StyleSheet.create({
   },
   row: {
     justifyContent: 'space-between',
+  },
+  loadingText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

@@ -20,6 +20,7 @@ import { loadUser, setTheme } from '../store/authSlice';
 import { loadFavorites } from '../store/favoritesSlice';
 import { storageService } from '../services/storage';
 import { lightTheme, darkTheme } from '../styles/theme';
+import { Platform } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,6 +122,11 @@ export default function AppNavigator() {
           text: theme.text,
           border: theme.border,
           notification: theme.primary,
+        },
+        // Provide fonts so components expecting `theme.fonts.medium`/`regular` don't crash
+        fonts: {
+          regular: { fontFamily: Platform.OS === 'android' ? 'sans-serif' : 'System' },
+          medium: { fontFamily: Platform.OS === 'android' ? 'sans-serif-medium' : 'System' },
         },
       }}
     >
